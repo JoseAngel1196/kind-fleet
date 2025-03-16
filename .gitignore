@@ -20,3 +20,6 @@
 **/charts/*.tgz
 
 .history
+
+# asdf
+.tool-versions
