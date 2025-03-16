@@ -1,0 +1,36 @@
+{{- if required "addons.kubePrometheusStack.enabled is required" .Values.addons.kubePrometheusStack.enabled -}}
+{{- $namespace := required "addons.kubePrometheusStack.namespace is required" .Values.addons.kubePrometheusStack.namespace -}}
+{{- $appName := "kube-prometheus-stack" -}}
+{{- $prometheusName := required "addons.kubePrometheusStack.prometheusName is required" .Values.addons.kubePrometheusStack.prometheusName -}}
+{{- $values := mustMergeOverwrite (include "kubePrometheusStackValues" . | fromYaml) (default (dict) .Values.addons.kubePrometheusStack.values) -}}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ $namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: -1
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ $appName }}
+  namespace: argocd
+spec:
+  project: {{ required "argocd.project is required" .Values.argocd.project }}
+  syncPolicy:
+    automated:
+      prune: {{ required "argocd.autoSync.prune is required" .Values.argocd.autoSync.prune }}
+      selfHeal: {{ required "argocd.autoSync.selfHeal is required" .Values.argocd.autoSync.selfHeal }}
+  source:
+    repoURL: {{ required "argocd.source.repoURL is required" .Values.argocd.source.repoURL }}
+    path: {{ required "argocd.source.basePath is required" .Values.argocd.source.basePath }}/{{ $appName }}
+    targetRevision: {{ required "argocd.source.targetRevision is required" .Values.argocd.source.basePath | quote }}
+    helm:
+      valueFiles:
+      - values-kind-fleet.yaml
+      values: |
+        {{- $values | toYaml | nindent 8 -}}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ $namespace }}

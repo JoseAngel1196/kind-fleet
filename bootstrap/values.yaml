@@ -1,0 +1,16 @@
+addons:
+  kubePrometheusStack:
+    prometheusName: "kube-prometheus-stack"
+    enabled: true
+    namespace: prometheus
+    values: {}
+
+argocd:
+  project: "kind-fleet"
+  source:
+    repoURL: https://github.com/JoseAngel1196/kind-fleet.git
+    basePath: addons
+    targetRevision: main
+  autoSync:
+    prune: true
+    selfHeal: true
