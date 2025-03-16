@@ -23,4 +23,11 @@
 OWNERS
 hack/
 ci/
-prometheus-operator-*.tgz
+kube-prometheus-*.tgz
+
+unittests/
+files/dashboards/
+
+UPGRADE.md
+CONTRIBUTING.md
+.editorconfig

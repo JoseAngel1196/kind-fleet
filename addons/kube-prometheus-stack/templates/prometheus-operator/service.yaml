@@ -2,11 +2,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "prometheus-operator.fullname" . }}-operator
-  namespace: {{ template "prometheus-operator.namespace" . }}
+  name: {{ template "kube-prometheus-stack.operator.fullname" . }}
+  namespace: {{ template "kube-prometheus-stack.namespace" . }}
   labels:
-    app: {{ template "prometheus-operator.name" . }}-operator
-{{ include "prometheus-operator.labels" . | indent 4 }}
+    {{- include "kube-prometheus-stack.prometheus-operator.labels" . | nindent 4 }}
 {{- if .Values.prometheusOperator.service.labels }}
 {{ toYaml .Values.prometheusOperator.service.labels | indent 4 }}
 {{- end }}
@@ -17,6 +16,10 @@ metadata:
 spec:
 {{- if .Values.prometheusOperator.service.clusterIP }}
   clusterIP: {{ .Values.prometheusOperator.service.clusterIP }}
+{{- end }}
+{{- if .Values.prometheusOperator.service.ipDualStack.enabled }}
+  ipFamilies: {{ toYaml .Values.prometheusOperator.service.ipDualStack.ipFamilies | nindent 4 }}
+  ipFamilyPolicy: {{ .Values.prometheusOperator.service.ipDualStack.ipFamilyPolicy }}
 {{- end }}
 {{- if .Values.prometheusOperator.service.externalIPs }}
   externalIPs:
@@ -31,14 +34,19 @@ spec:
     - {{ $cidr }}
   {{- end }}
 {{- end }}
+{{- if ne .Values.prometheusOperator.service.type "ClusterIP" }}
+  externalTrafficPolicy: {{ .Values.prometheusOperator.service.externalTrafficPolicy }}
+{{- end }}
   ports:
+  {{- if not .Values.prometheusOperator.tls.enabled }}
   - name: http
     {{- if eq .Values.prometheusOperator.service.type "NodePort" }}
     nodePort: {{ .Values.prometheusOperator.service.nodePort }}
     {{- end }}
     port: 8080
     targetPort: http
-  {{- if .Values.prometheusOperator.tlsProxy.enabled }}
+  {{- end }}
+  {{- if .Values.prometheusOperator.tls.enabled }}
   - name: https
     {{- if eq .Values.prometheusOperator.service.type "NodePort"}}
     nodePort: {{ .Values.prometheusOperator.service.nodePortTls }}
@@ -47,7 +55,7 @@ spec:
     targetPort: https
   {{- end }}
   selector:
-    app: {{ template "prometheus-operator.name" . }}-operator
+    app: {{ template "kube-prometheus-stack.name" . }}-operator
     release: {{ $.Release.Name | quote }}
   type: "{{ .Values.prometheusOperator.service.type }}"
 {{- end }}
