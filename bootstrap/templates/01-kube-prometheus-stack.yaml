@@ -25,8 +25,8 @@ spec:
       prune: {{ required "argocd.autoSync.prune is required" .Values.argocd.autoSync.prune }}
       selfHeal: {{ required "argocd.autoSync.selfHeal is required" .Values.argocd.autoSync.selfHeal }}
     syncOptions:
-      - CreateNamespace=true
-      - Replace=true
+      # - CreateNamespace=true
+      # - Replace=true
       - ServerSideApply=true 
   destination:
     server: https://kubernetes.default.svc
