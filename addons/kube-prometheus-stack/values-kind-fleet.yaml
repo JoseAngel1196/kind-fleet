@@ -6,8 +6,8 @@ alertmanager:
   enabled: false
 
 grafana:
-  enabled: false
+  enabled: true
 
 prometheus:
   ingress:
-    enabled: false
+    enabled: true

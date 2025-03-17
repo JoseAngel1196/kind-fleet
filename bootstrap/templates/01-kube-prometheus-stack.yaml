@@ -18,7 +18,6 @@ metadata:
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "1"
-    argocd.argoproj.io/sync-options: ServerSideApply=true
 spec:
   project: {{ required "argocd.project is required" .Values.argocd.project }}
   syncPolicy:
@@ -41,20 +40,4 @@ spec:
       - values-kind-fleet.yaml
       values: |
         {{- $values | toYaml | nindent 8 -}}
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: {{ $appName }}-ingress
-spec:
-  rules:
-  - http:
-      paths:
-      - pathType: Prefix
-        path: /prometheus
-        backend:
-          service:
-            name: {{ $appName }}-prometheus
-            port:
-              number: 9090
 {{- end -}}

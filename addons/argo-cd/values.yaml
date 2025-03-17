@@ -1279,7 +1279,7 @@ dex:
 ## Redis
 redis:
   # -- Enable redis
-  enabled: false
+  enabled: true
   # -- Redis name
   name: redis
 
@@ -1591,7 +1591,7 @@ redis:
 # Ref: https://github.com/DandyDeveloper/charts/blob/master/charts/redis-ha/values.yaml
 redis-ha:
   # -- Enables the Redis HA subchart and disables the custom Redis single node deployment
-  enabled: true
+  enabled: false
   ## Redis image
   image:
     # -- Redis repository
@@ -1698,7 +1698,7 @@ externalRedis:
 
 redisSecretInit:
   # -- Enable Redis secret initialization. If disabled, secret must be provisioned by alternative methods
-  enabled: false
+  enabled: true
   # -- Redis secret-init name
   name: redis-secret-init
 
