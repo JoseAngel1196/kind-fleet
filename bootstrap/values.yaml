@@ -3,7 +3,11 @@ addons:
     prometheusName: "kube-prometheus-stack"
     enabled: true
     namespace: prometheus
-    values: {}
+    values:
+      prometheus:
+        ingress:
+          paths:
+            - /prometheus
 
 argocd:
   project: "kind-fleet"

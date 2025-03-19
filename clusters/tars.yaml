@@ -13,8 +13,8 @@ nodes:
       - containerPort: 30443 # argocd
         hostPort: 30443
         protocol: TCP
-      - containerPort: 30904 # prometheus
-        hostPort: 30904
+      - containerPort: 30090 # prometheus
+        hostPort: 30090
       - containerPort: 80
         hostPort: 80
         protocol: TCP

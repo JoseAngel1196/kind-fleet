@@ -10,6 +10,7 @@ install-ingress-nginx:
 install-argocd-addon:
 	kubectl create ns argocd
 	helm install argocd addons/argo-cd
+	sleep 3
 	kubectl apply -f addons/argo-cd/kind-fleet-project.yaml
 
 .PHONY: install-bootstrap
