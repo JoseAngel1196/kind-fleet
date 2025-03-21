@@ -4,6 +4,9 @@ addons:
     enabled: true
     namespace: prometheus
     values:
+      grafana:
+        ingress:
+          path: /
       prometheus:
         ingress:
           paths:

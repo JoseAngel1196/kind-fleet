@@ -15,7 +15,6 @@ prometheus:
   ingress:
     enabled: true
     paths:
-      - /
       - /prometheus
   service:
     type: NodePort
